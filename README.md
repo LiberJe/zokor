@@ -8,6 +8,6 @@ An proxy of packing mole-proxy(Integrated weinre injection)
 
 `zokor localPort remotePort`
 
-localPort:本地测试服务器端口
+*localPort:* Local dev server port
 
-remotePort:给远程代理服务器分配的端口
+*remotePort:* The port assigned to the remote proxy server
