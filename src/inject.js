@@ -48,7 +48,8 @@ exports.startWeinre = function (proxyPort, weinrePort, weinreProxyPort, ip) {
       req.pipe(weinreReq)
     }).listen(weinreProxyPort)
 
-    console.log(`weinreProxy serve at ${ip}:${weinreProxyPort}`)
+    // console.log(`weinreProxy serve start`)
+    // console.log(`${ip}:${weinrePort} <=> ${ip}:${weinreProxyPort}`)
 
     opn(`http://${ip}:${weinreProxyPort}/client/#anonymous`)
   })

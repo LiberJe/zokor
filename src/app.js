@@ -39,5 +39,6 @@ module.exports = function (localPort, remotePort, proxyPort, weinrePort, weinreP
     req.pipe(proxyReq)
   }).listen(proxyPort)
 
-  console.log(`zokor serve at ${ip}:${proxyPort}`)
+  console.log(`zokor serve start`)
+  console.log(`cp01-rdqa-dev418-anqin-iwm.epc.baidu.com:${remotePort} <=> ${ip}:${proxyPort}`)
 }
