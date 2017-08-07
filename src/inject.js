@@ -1,12 +1,14 @@
+const fs = require('fs')
 const { exec } = require('child_process')
 const opn = require('opn')
 const http = require('http')
 const parseurl = require('url').parse
 const QRCode = require('qrcode')
-const { weinreUrl } = require('./utils.js')
+const { replaceTpl } = require('./utils')
+const { weinreUrl } = require('./config')
 
-exports.startWeinre = function (proxyPort, weinrePort, weinreProxyPort, ip) {
-  let qrcodeURL = `bdwm://native?pageName=webview&url=http%3A%2F%2F${ip}%3A${proxyPort}&header=2`
+exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinreProxyPort, ip) {
+  let qrcodeURL = `bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${serverAddress}%3A${serverPort}&header=2`
 
   exec(`node ${weinreUrl} --httpPort ${weinrePort} --boundHost -all-`, (err, stdout) => {
     if (err) {
@@ -57,24 +59,28 @@ exports.startWeinre = function (proxyPort, weinrePort, weinreProxyPort, ip) {
 }
 
 function qrcodeInjection (url) {
-  let script = ''
   return new Promise((resolve, reject) => {
     QRCode.toDataURL(url, (err, dataUrl) => {
       if (err) {
         console.log(err)
       }
-      script = `<script>
-        window.onload = () => {
-          let title = document.createElement('h1');
-          title.innerText = 'NA原始链接';
-          let qrcode = document.createElement('img');
-          qrcode.src='${dataUrl}';
-          let targetNode = document.querySelector('.weinreServerProperties');
-          targetNode.parentNode.appendChild(title)
-          targetNode.parentNode.appendChild(qrcode)
-        }
-        </script>`
-      resolve(script)
+      getScript('dataUrl', dataUrl).then(script => {
+        let injectScript = `<script>${script}</script>`
+        resolve(injectScript)
+      })
+    })
+  })
+}
+
+function getScript (tplName, targetData) {
+  return new Promise((resolve, reject) => {
+    fs.readFile('./src/weinreScript.js', (err, data) => {
+      if (err) {
+        console.log(err)
+      }
+      let str = data.toString()
+      let res = replaceTpl(str, {name: tplName, variable: targetData})
+      resolve(res)
     })
   })
 }

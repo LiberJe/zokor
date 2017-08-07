@@ -1,12 +1,13 @@
 const http = require('http')
+const { exec } = require('child_process')
+const opn = require('opn')
 const parseurl = require('url').parse
-const { startWeinre, injector } = require('./inject.js')
+const { startWeinre, injector } = require('./inject')
+const { moleProxyUrl, defaultServer, remotePort } = require('./config')
 
-module.exports = function (localPort, remotePort, proxyPort, weinrePort, weinreProxyPort, ip) {
-  startWeinre(proxyPort, weinrePort, weinreProxyPort, ip)
-
+module.exports = function (localPort, proxyPort, weinrePort, weinreProxyPort, ip) {
   http.createServer((req, res) => {
-    const opt = parseurl(`http://cp01-rdqa-dev418-anqin-iwm.epc.baidu.com:${remotePort}${req.url}`)
+    const opt = parseurl(`http://${ip}:${localPort}${req.url}`)
     opt.headers = req.headers
     opt.method = req.method
 
@@ -39,6 +40,32 @@ module.exports = function (localPort, remotePort, proxyPort, weinrePort, weinreP
     req.pipe(proxyReq)
   }).listen(proxyPort)
 
-  console.log(`zokor serve start`)
-  console.log(`cp01-rdqa-dev418-anqin-iwm.epc.baidu.com:${remotePort} <=> ${ip}:${proxyPort}`)
+  run(localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
+}
+
+function run (localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort) {
+  let moleProxy = exec(`node ${moleProxyUrl} ${proxyPort} ${remotePort}`, (err, stdout) => {
+    if (err) {
+      console.error(err)
+    }
+    if (/Exiting/.test(stdout)) {
+      remotePort++
+      run(localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
+    } else {
+      console.log(stdout)
+      process.exit(1)
+    }
+  })
+
+  moleProxy.stdout.on('data', data => {
+    if (data.indexOf(defaultServer) >= 0) {
+      console.log(data)
+      opn(`https://family.waimai.baidu.com/fe/static/#result/https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${defaultServer}%3A${remotePort}`)
+
+      console.log(`zokor serve start`)
+      console.log(`${ip}:${localPort} <=> ${ip}:${proxyPort}`)
+
+      startWeinre(defaultServer, remotePort, weinrePort, weinreProxyPort, ip)
+    }
+  })
 }

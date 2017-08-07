@@ -50,11 +50,13 @@ function getPort (port = 8000) {
   })
 }
 
-const moleProxyUrl = require.resolve('mole-proxy')
-const weinreUrl = require.resolve('weinre').replace(/[\/|\\]lib[\/|\\]weinre.js/, '/weinre')
+function replaceTpl (str, {name, variable}) {
+  let reg = new RegExp(`{{${name}}}`)
+  let res = str.replace(reg, variable)
+  return res
+}
 
 exports.getIP = getIP
 exports.getReliableIP = getReliableIP
 exports.getPort = getPort
-exports.moleProxyUrl = moleProxyUrl
-exports.weinreUrl = weinreUrl
+exports.replaceTpl = replaceTpl
