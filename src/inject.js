@@ -2,12 +2,13 @@ const { exec } = require('child_process')
 const opn = require('opn')
 const http = require('http')
 const parseurl = require('url').parse
-let QRCode = require('qrcode')
+const QRCode = require('qrcode')
+const { weinreUrl } = require('./utils.js')
 
 exports.startWeinre = function (proxyPort, weinrePort, weinreProxyPort, ip) {
   let qrcodeURL = `bdwm://native?pageName=webview&url=http%3A%2F%2F${ip}%3A${proxyPort}&header=2`
 
-  exec(`weinre --httpPort ${weinrePort} --boundHost -all-`, (err, stdout) => {
+  exec(`node ${weinreUrl} --httpPort ${weinrePort} --boundHost -all-`, (err, stdout) => {
     if (err) {
       console.log(err)
       console.log('Error on opening weinre')

@@ -1,35 +1,14 @@
-const { exec, execSync } = require('child_process')
-const fs = require('fs')
+const { exec } = require('child_process')
 const opn = require('opn')
-const dep = require('./dependencies.json')
-const { getIP, getPort } = require('./src/utils.js')
+const { getReliableIP, getPort, moleProxyUrl } = require('./src/utils.js')
 
-if (dep.moleProxy && dep.weinre) {
-  start()
-} else {
-  if (!dep.moleProxy) {
-    console.log('Your computer is not installed mole-proxy, ready to install mole-proxy')
-    execSync('npm install -g mole-proxy', (err, stdout) => {
-      if (err) {
-        console.log('Please manually install mole-proxy globally')
-      } else {
-        dep.moleProxy = true
-      }
-    })
-  }
-  if (!dep.weinre) {
-    console.log('Your computer is not installed mole-proxy, ready to install weinre')
-    execSync('npm install -g weinre', (err, stdout) => {
-      if (err) {
-        console.log('Please manually install weinre globally')
-      } else {
-        dep.weinre = true
-      }
-    })
-  }
-  fs.writeFileSync('dependencies.json', JSON.stringify(dep))
-  start()
+let version = process.version.match(/^v([0-9]+)\./)[1] - 0
+if (version < 7) {
+  console.log('Node version too old (' + process.version + '), please update to v7.0+')
+  process.exit(1)
 }
+
+start()
 
 function start () {
   let argv = process.argv.slice(2)
@@ -37,7 +16,7 @@ function start () {
   if (!argv[0] || !argv[1]) {
     help()
   } else if (Math.floor(argv[0]) == argv[0] && Math.floor(argv[1]) == argv[1]) {
-    let moleProxy = exec(`mole-proxy ${argv[0]} ${argv[1]}`, (err, stdout) => {
+    let moleProxy = exec(`node ${moleProxyUrl} ${argv[0]} ${argv[1]}`, (err, stdout) => {
       if (err) {
         console.error(err)
       }
@@ -51,20 +30,21 @@ function start () {
           console.log('Maybe you need change a remotePort')
         }
       } else {
-        let localIP = getIP()
-        getPort(8000).then(proxyPort => {
-          getPort(proxyPort + 1).then(weinrePort => {
-            getPort(weinrePort + 1).then(weinreProxyPort => {
-              opn(`https://family.waimai.baidu.com/fe/static/#result/http%3A%2F%2F${localIP}%3A${proxyPort}`)
-              require('./src/app')(argv[0], argv[1], proxyPort, weinrePort, weinreProxyPort, localIP)
-            })
-          })
-        })
+        run(argv[0], argv[1])
       }
     })
   } else {
     help()
   }
+}
+
+async function run (arg0, arg1) {
+  let localIP = await getReliableIP()
+  let proxyPort = await getPort(8000)
+  let weinrePort = await getPort(proxyPort + 1)
+  let weinreProxyPort = await getPort(weinrePort + 1)
+  opn(`https://family.waimai.baidu.com/fe/static/#result/http%3A%2F%2F${localIP}%3A${proxyPort}`)
+  require('./src/app')(arg0, arg1, proxyPort, weinrePort, weinreProxyPort, localIP)
 }
 
 function help () {

@@ -1,4 +1,5 @@
 const os = require('os')
+const dns = require('dns')
 const net = require('net')
 
 function getIP () {
@@ -14,6 +15,17 @@ function getIP () {
     }
   }
   return ip
+}
+
+function getReliableIP () {
+  return new Promise((resolve, reject) => {
+    dns.lookup(os.hostname(), (err, address) => {
+      if (err) {
+        console.log(err)
+      }
+      resolve(address)
+    })
+  })
 }
 
 function getPort (port = 8000) {
@@ -38,5 +50,11 @@ function getPort (port = 8000) {
   })
 }
 
+const moleProxyUrl = require.resolve('mole-proxy')
+const weinreUrl = require.resolve('weinre').replace(/[\/|\\]lib[\/|\\]weinre.js/, '/weinre')
+
 exports.getIP = getIP
+exports.getReliableIP = getReliableIP
 exports.getPort = getPort
+exports.moleProxyUrl = moleProxyUrl
+exports.weinreUrl = weinreUrl
