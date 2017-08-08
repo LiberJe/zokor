@@ -1,8 +1,8 @@
 const { getReliableIP, getPort } = require('./src/utils.js')
 
 let version = process.version.match(/^v([0-9]+)\./)[1] - 0
-if (version < 7) {
-  console.log('Node version too old (' + process.version + '), please update to v7.0+')
+if (version < 8) {
+  console.log('Node version too old (' + process.version + '), please update to v8.0+')
   process.exit(1)
 }
 

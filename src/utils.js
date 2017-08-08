@@ -21,9 +21,27 @@ function getReliableIP () {
   return new Promise((resolve, reject) => {
     dns.lookup(os.hostname(), (err, address) => {
       if (err) {
-        console.log(err)
+        if (!address) {
+          let ip = getIP()
+          resolve(ip)
+        }
+      } else {
+        resolve(address)
       }
-      resolve(address)
+    })
+  })
+}
+
+function getNetworkIP () {
+  return new Promise((resolve, reject) => {
+    let socket = net.createConnection(80, 'www.baidu.com')
+    socket.on('connect', () => {
+      let ip = socket.localAddress
+      socket.end()
+      resolve(ip)
+    })
+    socket.on('error', (e) => {
+      console.log(e)
     })
   })
 }
