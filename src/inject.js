@@ -7,7 +7,7 @@ const QRCode = require('qrcode')
 const { replaceTpl } = require('./utils')
 const { weinreUrl } = require('./config')
 
-let scriptW = fs.readFileSync('./src/weinreScript.js').toString();
+let scriptW = fs.readFileSync(require.resolve('./weinreScript.js')).toString()
 
 exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinreProxyPort, ip) {
   let qrcodeURL = `https://s.waimai.baidu.com/xin/open.html#http://${serverAddress}:${serverPort}`
