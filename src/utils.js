@@ -41,7 +41,7 @@ function getNetworkIP () {
       resolve(ip)
     })
     socket.on('error', (e) => {
-      console.log(e)
+      // console.log(e)
     })
   })
 }
@@ -75,6 +75,7 @@ function replaceTpl (str, {name, variable}) {
 }
 
 exports.getIP = getIP
-exports.getReliableIP = getReliableIP
+// exports.getReliableIP = getReliableIP
+exports.getReliableIP = getNetworkIP
 exports.getPort = getPort
 exports.replaceTpl = replaceTpl

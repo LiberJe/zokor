@@ -1,3 +1,5 @@
+require('events').EventEmitter.prototype._maxListeners = 100
+
 const { getReliableIP, getPort } = require('./src/utils.js')
 
 let version = process.version.match(/^v([0-9]+)\./)[1] - 0
