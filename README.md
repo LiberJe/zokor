@@ -6,8 +6,7 @@ An proxy of packing mole-proxy(Integrated weinre injection)
 
 `npm install -g zokor`
 
-`zokor localPort remotePort`
+`zokor localPort`
 
 *localPort:* Local dev server port
 
-*remotePort:* The port assigned to the remote proxy server

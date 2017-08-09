@@ -7,8 +7,11 @@ const QRCode = require('qrcode')
 const { replaceTpl } = require('./utils')
 const { weinreUrl } = require('./config')
 
+let scriptW = fs.readFileSync('./src/weinreScript.js').toString();
+
 exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinreProxyPort, ip) {
-  let qrcodeURL = `bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${serverAddress}%3A${serverPort}&header=2`
+  let qrcodeURL = `https://s.waimai.baidu.com/xin/open.html#http://cp01-rdqa-dev418-anqin-iwm.epc.baidu.com:8004`
+  let qrcodeNaURL = `bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${serverAddress}%3A${serverPort}&header=2`
 
   exec(`node ${weinreUrl} --httpPort ${weinrePort} --boundHost -all-`, (err, stdout) => {
     if (err) {
@@ -17,7 +20,9 @@ exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinrePro
     }
   })
 
-  qrcodeInjection(qrcodeURL).then(script => {
+  qrcodeInjection(qrcodeURL, 'dataUrl').then(() => {
+    return qrcodeInjection(qrcodeNaURL, 'naUrl')
+  }).then(script => {
     http.createServer((req, res) => {
       const opt = parseurl(`http://${ip}:${weinrePort}${req.url}`)
       opt.headers = req.headers
@@ -30,7 +35,9 @@ exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinrePro
 
         weinreRes.on('data', chunk => {
           if (/html/i.test(weinreRes.headers['content-type'])) {
-            let data = injector(chunk, script)
+            let jq = '<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script><script src="http://cdn.staticfile.org/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>'
+            let data = injector(chunk, jq)
+            data = injector(data, script)
             res.setHeader('content-length', data.length)
             res.write(data)
           } else {
@@ -58,13 +65,13 @@ exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinrePro
   })
 }
 
-function qrcodeInjection (url) {
+function qrcodeInjection (url, name) {
   return new Promise((resolve, reject) => {
-    QRCode.toDataURL(url, (err, dataUrl) => {
+    QRCode.toDataURL(url, (err, data) => {
       if (err) {
         console.log(err)
       }
-      getScript('dataUrl', dataUrl).then(script => {
+      getScript(name, url).then(script => {
         let injectScript = `<script>${script}</script>`
         resolve(injectScript)
       })
@@ -74,14 +81,8 @@ function qrcodeInjection (url) {
 
 function getScript (tplName, targetData) {
   return new Promise((resolve, reject) => {
-    fs.readFile('./src/weinreScript.js', (err, data) => {
-      if (err) {
-        console.log(err)
-      }
-      let str = data.toString()
-      let res = replaceTpl(str, {name: tplName, variable: targetData})
-      resolve(res)
-    })
+    scriptW = replaceTpl(scriptW, {name: tplName, variable: targetData})
+    resolve(scriptW)
   })
 }
 

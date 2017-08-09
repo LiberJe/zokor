@@ -1,5 +1,7 @@
 const http = require('http')
 const { exec } = require('child_process')
+const zlib = require('zlib')
+const gzip = zlib.createGzip()
 const opn = require('opn')
 const parseurl = require('url').parse
 const { startWeinre, injector } = require('./inject')
@@ -37,7 +39,7 @@ module.exports = function (localPort, proxyPort, weinrePort, weinreProxyPort, ip
       console.error(err)
       res.end()
     })
-    req.pipe(proxyReq)
+    req.pipe(gzip).pipe(proxyReq)
   }).listen(proxyPort)
 
   run(localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
@@ -60,7 +62,7 @@ function run (localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
   moleProxy.stdout.on('data', data => {
     if (data.indexOf(defaultServer) >= 0) {
       console.log(data)
-      opn(`https://family.waimai.baidu.com/fe/static/#result/https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${defaultServer}%3A${remotePort}`)
+      // opn(`https://family.waimai.baidu.com/fe/static/#result/https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${defaultServer}%3A${remotePort}`)
 
       console.log(`zokor serve start`)
       console.log(`${ip}:${localPort} <=> ${ip}:${proxyPort}`)
