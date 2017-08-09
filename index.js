@@ -11,9 +11,7 @@ start()
 function start () {
   let argv = process.argv.slice(2)
 
-  if (!argv[0]) {
-    help()
-  } else if (Math.floor(argv[0]) == argv[0]) {
+  if (argv[0] && Math.floor(argv[0]) == argv[0]) {
     run(argv[0])
   } else {
     help()
