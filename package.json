@@ -1,16 +1,35 @@
 {
-  "name": "zokor",
-  "version": "1.0.8",
-  "description": "packing mole-proxy",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "_from": "zokor",
+  "_id": "zokor@1.0.11",
+  "_inBundle": false,
+  "_integrity": "sha512-vWADLDd6jHQ49iUwhwlRUmwMmhd31eh3/TyLEFcLizSW6FuAaNst9PdmLOrWQvzoVmR+6VBp7T/MhgQ3MEuvXA==",
+  "_location": "/zokor",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "zokor",
+    "name": "zokor",
+    "escapedName": "zokor",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
   },
-  "keywords": [
-    "proxy"
+  "_requiredBy": [
+    "#USER",
+    "/"
   ],
-  "author": "JeLewine",
-  "license": "ISC",
+  "_resolved": "https://registry.npmjs.org/zokor/-/zokor-1.0.11.tgz",
+  "_shasum": "3bc378365c5c13651696e985c4e3e3349aca607d",
+  "_spec": "zokor",
+  "_where": "C:\\Users\\think",
+  "author": {
+    "name": "JeLewine"
+  },
+  "bin": {
+    "zokor": "bin/index"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "babel": "^6.23.0",
     "mole-proxy": "^1.0.13",
@@ -18,11 +37,17 @@
     "qrcode": "^0.9.0",
     "weinre": "^2.0.0-pre-I0Z7U9OV"
   },
-  "bin": {
-    "zokor": "bin/index"
+  "deprecated": false,
+  "description": "packing mole-proxy",
+  "devDependencies": {},
+  "keywords": [
+    "proxy"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "zokor",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-register": "^6.24.1"
-  }
+  "version": "1.0.11"
 }

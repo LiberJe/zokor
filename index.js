@@ -1,4 +1,3 @@
-require('babel-register')
 require('events').EventEmitter.prototype._maxListeners = 100
 
 const { getReliableIP, getPort } = require('./src/utils.js')
