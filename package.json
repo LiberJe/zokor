@@ -1,54 +1,33 @@
 {
-  "_from": "zokor",
-  "_id": "zokor@1.0.12",
-  "_inBundle": false,
-  "_integrity": "sha512-vWADLDd6jHQ49iUwhwlRUmwMmhd31eh3/TyLEFcLizSW6FuAaNst9PdmLOrWQvzoVmR+6VBp7T/MhgQ3MEuvXA==",
-  "_location": "/zokor",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "zokor",
-    "name": "zokor",
-    "escapedName": "zokor",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/zokor/-/zokor-1.0.11.tgz",
-  "_shasum": "3bc378365c5c13651696e985c4e3e3349aca607d",
-  "_spec": "zokor",
-  "_where": "C:\\Users\\think",
-  "author": {
-    "name": "JeLewine"
-  },
-  "bin": {
-    "zokor": "bin/index"
-  },
-  "bundleDependencies": false,
+  "name": "zokor",
+  "version": "1.0.12",
+  "description": "packing mole-proxy",
+  "main": "index.js",
   "dependencies": {
+    "babel-register": "^6.24.1",
     "mole-proxy": "^1.0.13",
     "opn": "^5.1.0",
     "qrcode": "^0.9.0",
     "weinre": "^2.0.0-pre-I0Z7U9OV"
   },
-  "deprecated": false,
-  "description": "packing mole-proxy",
-  "devDependencies": {
-    "babel-register": "^6.24.1"
-  },
-  "keywords": [
-    "proxy"
-  ],
-  "license": "ISC",
-  "main": "index.js",
-  "name": "zokor",
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.11"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LiberJe/zokor.git"
+  },
+  "keywords": [
+    "proxy",
+    "weinre",
+    "mole-proxy",
+    "zokor"
+  ],
+  "author": "JeLewine",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LiberJe/zokor/issues"
+  },
+  "homepage": "https://github.com/LiberJe/zokor#readme"
 }
