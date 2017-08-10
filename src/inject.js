@@ -10,8 +10,8 @@ const { weinreUrl } = require('./config')
 let scriptW = fs.readFileSync(require.resolve('./weinreScript.js')).toString()
 
 exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinreProxyPort, ip) {
-  let qrcodeURL = `https://s.waimai.baidu.com/xin/open.html#http://${serverAddress}:${serverPort}`
-  let qrcodeNaURL = `bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${serverAddress}%3A${serverPort}&header=2`
+  let qrcodeURL = `http://${serverAddress}:${serverPort}`
+  let qrcodeNaURL = `bdwm://native?pageName=webview&url=http%3A%2F%2F${serverAddress}%3A${serverPort}&header=2`
 
   exec(`node ${weinreUrl} --httpPort ${weinrePort} --boundHost -all-`, (err, stdout) => {
     if (err) {
@@ -61,7 +61,7 @@ exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinrePro
     // console.log(`weinreProxy serve start`)
     // console.log(`${ip}:${weinrePort} <=> ${ip}:${weinreProxyPort}`)
 
-    opn(`http://${ip}:${weinreProxyPort}/client/#anonymous`)
+    opn(`http://localhost:${weinreProxyPort}/client/#anonymous`)
   })
 }
 

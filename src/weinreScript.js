@@ -24,7 +24,7 @@ window.onload = () => {
   right.style.width = '400px';
   right.style.marginLeft = '20px';
   let titleR = document.createElement('h1');
-  titleR.innerText = 'NA原始链接';
+  titleR.innerText = 'NA链接';
   let textR = document.createElement('textarea');
   textR.id = 'textR'
   textR.style.width = '400px';
@@ -49,17 +49,24 @@ window.onload = () => {
   pNode.removeChild(pNode.childNodes[1])
   pNode.removeChild(pNode.childNodes[1])
 
-  jQuery('#qrcodeL').qrcode({width: 200, height: 200, text: textL.value})
-  jQuery('#qrcodeR').qrcode({width: 200, height: 200, text: textR.value})
+  let qrcodeInitTxtL = 'https://s.waimai.baidu.com/xin/open.html#' + textL.value
+  let qrcodeInitTxtR = textR.value.replace(/^(bdwm:\/\/native\?pageName=webview&url)/, 'bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23')
+
+  jQuery('#qrcodeL').qrcode({width: 200, height: 200, text: qrcodeInitTxtL})
+  jQuery('#qrcodeR').qrcode({width: 200, height: 200, text: qrcodeInitTxtR})
 
   jQuery('#textL').bind('input propertychange', () => {  
     jQuery('#qrcodeL')[0].removeChild(jQuery('#qrcodeL')[0].childNodes[0])
-    jQuery('#qrcodeL').qrcode({width: 200, height: 200, text: jQuery("#textL").val()})
+    let qrcodeTxtL = 'https://s.waimai.baidu.com/xin/open.html#' + jQuery("#textL").val()
+    console.log(qrcodeL)
+    jQuery('#qrcodeL').qrcode({width: 200, height: 200, text: qrcodeTxtL})
   })
 
   jQuery('#textR').bind('input propertychange', () => {  
     jQuery('#qrcodeR')[0].removeChild(jQuery('#qrcodeR')[0].childNodes[0])
-    jQuery('#qrcodeR').qrcode({width: 200, height: 200, text: jQuery("#textR").val()})
+    let qrcodeTxtR = jQuery("#textR").val().replace(/^(bdwm:\/\/native\?pageName=webview&url)/, 'bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23')
+    console.log(qrcodeR)
+    jQuery('#qrcodeR').qrcode({width: 200, height: 200, text: qrcodeTxtR})
   })
   
 }

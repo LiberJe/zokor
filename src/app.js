@@ -65,7 +65,7 @@ function run (localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
       // opn(`https://family.waimai.baidu.com/fe/static/#result/https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23http%3A%2F%2F${defaultServer}%3A${remotePort}`)
 
       console.log(`zokor serve start`)
-      console.log(`${ip}:${localPort} <=> ${ip}:${proxyPort}`)
+      console.log(`localhost:${localPort} <=> localhost:${proxyPort}`)
 
       startWeinre(defaultServer, remotePort, weinrePort, weinreProxyPort, ip)
     }
