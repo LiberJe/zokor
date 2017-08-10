@@ -1,6 +1,6 @@
 {
   "name": "zokor",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "packing mole-proxy",
   "main": "index.js",
   "dependencies": {
@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/LiberJe/zokor/issues"
   },
-  "homepage": "https://github.com/LiberJe/zokor#readme"
+  "homepage": "https://github.com/LiberJe/zokor#readme",
+  "bin": {
+    "zokor": "bin/index"
+  }
 }
