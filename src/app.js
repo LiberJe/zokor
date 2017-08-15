@@ -2,7 +2,6 @@ const http = require('http')
 const { exec } = require('child_process')
 const zlib = require('zlib')
 const gzip = zlib.createGzip()
-const opn = require('opn')
 const parseurl = require('url').parse
 const { startWeinre, injector } = require('./inject')
 const { moleProxyUrl, defaultServer, remotePort } = require('./config')
