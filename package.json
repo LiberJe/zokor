@@ -1,6 +1,6 @@
 {
   "name": "zokor",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "packing mole-proxy",
   "main": "index.js",
   "dependencies": {
@@ -10,6 +10,7 @@
     "weinre": "^2.0.0-pre-I0Z7U9OV"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-preset-es2017": "^6.24.1"
   },
   "scripts": {
