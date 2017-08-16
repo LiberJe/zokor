@@ -1,30 +1,24 @@
+require('events').EventEmitter.prototype._maxListeners = 100
+const { getReliableIP, getPort } = require('./utils.js')
 
-// const { getReliableIP, getPort } = require('./utils.js')
-
-// let version = process.version.match(/^v([0-9]+)\./)[1] - 0
-// if (version < 8) {
-//   console.log('Node version too old (' + process.version + '), please update to v8.0+')
-//   process.exit(1)
-// }
-
-// start()
+start()
 
 function start (app, utils) {
   let argv = process.argv.slice(2)
 
   if (argv[0] && Math.floor(argv[0]) == argv[0]) {
-    run(argv[0], app, utils)
+    run(argv[0])
   } else {
     help()
   }
 }
 
-async function run (arg, app, utils) {
-  let localIP = await utils.getReliableIP()
-  let proxyPort = await utils.getPort(8000)
-  let weinrePort = await utils.getPort(proxyPort + 1)
-  let weinreProxyPort = await utils.getPort(weinrePort + 1)
-  app(arg, proxyPort, weinrePort, weinreProxyPort, localIP)
+async function run (arg) {
+  let localIP = await getReliableIP()
+  let proxyPort = await getPort(8000)
+  let weinrePort = await getPort(proxyPort + 1)
+  let weinreProxyPort = await getPort(weinrePort + 1)
+  require('./app')(arg, proxyPort, weinrePort, weinreProxyPort, localIP)
 }
 
 function help () {
