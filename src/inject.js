@@ -36,8 +36,8 @@ exports.startWeinre = function (serverAddress, serverPort, weinrePort, weinrePro
         weinreRes.on('data', chunk => {
           if (/html/i.test(weinreRes.headers['content-type'])) {
             let jq = '<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script><script src="http://cdn.staticfile.org/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>'
-            let data = injector(chunk, jq)
-            data = injector(data, script)
+            let data = injector(chunk, jq, '</body>')
+            data = injector(data, script, '</body>')
             res.setHeader('content-length', data.length)
             res.write(data)
           } else {
@@ -86,9 +86,9 @@ function getScript (tplName, targetData) {
   })
 }
 
-function injector (data, script) {
+function injector (data, script, pos) {
   let dataStr = data.toString()
-  let i = dataStr.indexOf('</body>')
+  let i = dataStr.indexOf(pos)
   if (i > 0) {
     let dataStrLeft = dataStr.substring(0, i)
     let dataStrRight = dataStr.substring(i)

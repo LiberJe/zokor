@@ -1,4 +1,5 @@
 window.onload = () => {
+  // qrcode inject
   let room = document.createElement('div');
 
   let left = document.createElement('div');
@@ -68,5 +69,49 @@ window.onload = () => {
     console.log(qrcodeR)
     jQuery('#qrcodeR').qrcode({width: 200, height: 200, text: qrcodeTxtR})
   })
-  
+
+  // toolbar style optimization
+  $('#toolbar').css({
+    'height': '24px',
+    'border-bottom': '1px solid #cccccc',
+    'background-image': 'none',
+    'background-color': '#f3f3f3'
+  });
+  $('#main').css({
+    'top': '24px'
+  });
+  $('.toolbar-icon').remove()
+
+  // footbar
+  // $('.status-bar').css({
+  //   'background-image': 'none',
+  //   'background-color': '#f3f3f3'
+  // });
+
+  // append button
+  $('#toolbar .console').after("<button class='toolbar-item toggleable mock' style='display:inline-block'><div class='toolbar-label'>Mock</div></button>");
+  $('#toolbar .console').after("<button class='toolbar-item toggleable wm-offline' style='display:inline-block'><div class='toolbar-label'>WM-Offline</div></button>");
+
+  // bind toolbar clickevent
+  ['remote', 'elements', 'resources', 'network', 'timeline', 'console', 'wm-offline', 'mock'].map((item, index) => {
+    $(`#toolbar .${item}`).click(() => {
+      if (item !== 'console') {
+        $('#main').css({
+          'bottom': '0px'
+        })
+      } else {
+        $('#main').css({
+          'bottom': '614px'
+        })
+      }
+      $('.toolbar-item').removeClass('toggled-on');
+      $('.panel').removeClass('visible');
+      $(`#toolbar .${item}`).addClass('toggled-on');
+      $(`#main-panels .${item}`).addClass('visible');
+    })
+  });
+
+  // append panel
+  $('#main-panels').append("<div class='panel wm-offline'><b>Coming soon</b></div>")
+  $('#main-panels').append("<div class='panel mock'><b>Coming soon</b></div>")
 }
