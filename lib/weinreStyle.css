@@ -1,0 +1,25 @@
+<style type="text/css">
+#toolbar {
+  height: 24px;
+  border-bottom: 1px solid #ccc;
+  background-image: none;
+  background-color: #f3f3f3;
+}
+#main {
+  top: 24px;
+}
+.toolbar-icon {
+  display: none;
+}
+
+.pane .title {
+  background-image: none;
+  background-color: #f0f0f0;
+  border-bottom: none;
+}
+.styles-sidebar-separator {
+  background-image: none;
+  background-color: #d4d4d4;
+  color: black;
+}
+</style>
