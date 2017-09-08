@@ -1,6 +1,6 @@
 {
   "name": "zokor",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "packing mole-proxy",
   "main": "index.js",
   "dependencies": {
