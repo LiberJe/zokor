@@ -41,17 +41,17 @@ module.exports = function (localPort, proxyPort, weinrePort, weinreProxyPort, ip
     req.pipe(gzip).pipe(proxyReq)
   }).listen(proxyPort)
 
-  run(localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
+  run(defaultServer, localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
 }
 
-function run (localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort) {
-  let moleProxy = exec(`node ${moleProxyUrl} ${proxyPort} ${remotePort}`, (err, stdout) => {
+function run (defaultServer, localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort) {
+  let moleProxy = exec(`node ${moleProxyUrl} ${defaultServer}:8008 ${proxyPort} ${remotePort}`, (err, stdout) => {
     if (err) {
       console.error(err)
     }
     if (/Exiting/.test(stdout)) {
       remotePort++
-      run(localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
+      run(defaultServer, localPort, proxyPort, remotePort, ip, weinrePort, weinreProxyPort)
     } else {
       console.log(stdout)
       process.exit(1)
