@@ -19,21 +19,6 @@ function getIP () {
 
 function getReliableIP () {
   return new Promise((resolve, reject) => {
-    dns.lookup(os.hostname(), (err, address) => {
-      if (err) {
-        if (!address) {
-          let ip = getIP()
-          resolve(ip)
-        }
-      } else {
-        resolve(address)
-      }
-    })
-  })
-}
-
-function getNetworkIP () {
-  return new Promise((resolve, reject) => {
     let socket = net.createConnection(80, 'www.baidu.com')
     socket.on('connect', () => {
       let ip = socket.localAddress
@@ -75,7 +60,6 @@ function replaceTpl (str, {name, variable}) {
 }
 
 exports.getIP = getIP
-// exports.getReliableIP = getReliableIP
-exports.getReliableIP = getNetworkIP
+exports.getReliableIP = getReliableIP
 exports.getPort = getPort
 exports.replaceTpl = replaceTpl

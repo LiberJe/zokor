@@ -1,6 +1,6 @@
 # zokor
 
-An proxy of packing mole-proxy(Integrated weinre injection)
+A tool for remotely debugging and testing your WebAPP(Integrated vorlon injection)
 
 ## start
 
@@ -9,4 +9,3 @@ An proxy of packing mole-proxy(Integrated weinre injection)
 `zokor localPort`
 
 *localPort:* Local dev server port
-

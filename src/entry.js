@@ -1,5 +1,6 @@
 require('events').EventEmitter.prototype._maxListeners = 100
-const { getReliableIP, getPort } = require('./utils.js')
+const { getReliableIP, getPort } = require('./utils')
+const { vorlonPort, zokorPort } = require('./config')
 
 start()
 
@@ -15,10 +16,7 @@ function start (app, utils) {
 
 async function run (arg) {
   let localIP = await getReliableIP()
-  let proxyPort = await getPort(8000)
-  let weinrePort = await getPort(proxyPort + 1)
-  let weinreProxyPort = await getPort(weinrePort + 1)
-  require('./app')(arg, proxyPort, weinrePort, weinreProxyPort, localIP)
+  require('./server/app')(arg, zokorPort, vorlonPort, localIP)
 }
 
 function help () {

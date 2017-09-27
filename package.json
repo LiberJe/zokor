@@ -1,20 +1,10 @@
 {
   "name": "zokor",
-  "version": "1.0.27",
-  "description": "packing mole-proxy",
+  "version": "2.0.0",
+  "description": "A tool for remotely debugging and testing your WebAPP",
   "main": "index.js",
-  "dependencies": {
-    "mole-proxy": "^1.0.13",
-    "opn": "^5.1.0",
-    "qrcode": "^0.9.0",
-    "weinre": "^2.0.0-pre-I0Z7U9OV"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1"
-  },
   "scripts": {
-    "build": "babel src -d lib"
+    "start": "node index 8080"
   },
   "repository": {
     "type": "git",
@@ -22,9 +12,11 @@
   },
   "keywords": [
     "proxy",
-    "weinre",
+    "zokor",
+    "vorlon",
     "mole-proxy",
-    "zokor"
+    "remotely",
+    "debug"
   ],
   "author": "JeLewine",
   "license": "ISC",
@@ -32,7 +24,18 @@
     "url": "https://github.com/LiberJe/zokor/issues"
   },
   "homepage": "https://github.com/LiberJe/zokor#readme",
+  "dependencies": {
+    "mole-proxy": "^1.0.13",
+    "opn": "^5.1.0",
+    "qrcode": "^0.9.0",
+    "vorlon": "^0.5.5"
+  },
   "bin": {
     "zokor": "bin/index"
+  },
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.26.0"
   }
 }

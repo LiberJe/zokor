@@ -1,0 +1,20 @@
+section.dashboard-plugins-container
+  section.dashboard-plugins
+    section.panel-top#pluginsPaneTop
+      header.tab-bar.cf#pluginsListPaneTop
+
+    section.panel-bottom#pluginsPaneBottom
+      header.tab-bar.cf#pluginsListPaneBottom
+  section.dashboard-plugins-overlay
+    div.message
+      div.dashboard-box
+        h1 原始链接
+        textarea#dashboard-txt-origin(name="", cols="40", rows="7")
+        div#dashboard-qrcode-origin
+      div.dashboard-box
+        h1 NA链接
+        textarea#dashboard-txt-na(name="", cols="40", rows="7")
+        div#dashboard-qrcode-na
+      br
+      div.waitLoader.hidden
+        span.fa.fa-spin.fa-spinner

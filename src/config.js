@@ -1,13 +1,9 @@
 
-const moleProxyUrl = require.resolve('mole-proxy')
-
-const weinreUrl = require.resolve('weinre').replace(/[\/|\\]lib[\/|\\]weinre.js/, '/weinre')
-
-const defaultServer = 'cicily.inwaimai.baidu.com'
-
-const remotePort = 8000
-
-exports.moleProxyUrl = moleProxyUrl
-exports.weinreUrl = weinreUrl
-exports.defaultServer = defaultServer
-exports.remotePort = remotePort
+module.exports = {
+  moleProxyUrl: require.resolve('mole-proxy'),
+  vorlonUrl: require.resolve('../vorlon/Server/server'),
+  vorlonPort: 1337,
+  zokorPort: 8050,
+  remoteServer: 'cicily.inwaimai.baidu.com',
+  remoteServerPort: 8000
+}
