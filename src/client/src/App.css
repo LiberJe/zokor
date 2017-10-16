@@ -1,0 +1,26 @@
+@import '~antd/dist/antd.css';
+
+body {
+  height: 100%;
+  background: #ececec;
+}
+
+.logo {
+  width: 120px;
+  height: 31px;
+  border-radius: 6px;
+  float: left;
+}
+
+.delete {
+  padding-top: 2px;
+}
+
+.star:hover {
+  cursor: pointer;
+  color: #f5a623;
+}
+
+.delete:hover {
+  cursor: pointer;
+}

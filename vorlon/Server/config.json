@@ -46,7 +46,7 @@
             "name": "Best practices",
             "panel": "top",
             "foldername": "webstandards",
-            "enabled": true
+            "enabled": false
         },
         {
             "id": "NETWORK",
@@ -67,13 +67,27 @@
             "name": "Unit Test",
             "panel": "top",
             "foldername": "unitTestRunner",
-            "enabled": true
+            "enabled": false
         },
         {
             "id": "DEVICE",
             "name": "My Device",
             "panel": "top",
             "foldername": "device",
+            "enabled": true
+        },
+        {
+            "id": "QRCODE",
+            "name": "Qrcode",
+            "panel": "top",
+            "foldername": "qrcode",
+            "enabled": true
+        },
+        {
+            "id": "MOCK",
+            "name": "Mock(alpha)",
+            "panel": "top",
+            "foldername": "mock",
             "enabled": true
         },
         {
@@ -154,13 +168,6 @@
             "enabled": false,
             "nodeCompliant": false,
             "nodeOnly": false
-        },
-        {
-            "id": "QRCODE",
-            "name": "Qrcode",
-            "panel": "top",
-            "foldername": "qrcode",
-            "enabled": true
         }
     ]
 }

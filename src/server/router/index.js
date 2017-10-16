@@ -1,9 +1,12 @@
 const parseurl = require('url').parse
 const { proxyForward } = require('../interceptor/injector')
 const { remoteServer, remoteServerPort, vorlonPort } = require('../../config')
+const db = require('../db') 
+
+let activeProject = {}
+let mockPathname = []
 
 const routes = {
-  workbench: () => {},
   qrcode: (req, res) => {
     const data = {
       origin: `http://${remoteServer}:${remoteServerPort}`,
@@ -13,10 +16,49 @@ const routes = {
     res.writeHead(200, { "Content-Type": "text/plain" })
     res.end(JSON.stringify(data))
   },
-  get: () => {},
-  put: () => {},
-  delete: () => {},
-  post: () => {}
+  addproject: handleRouter(db.addproject),
+  getprojectlist: handleRouter(db.getprojectlist),
+  getactiveprojectkey: handleRouter(db.getactiveprojectkey),
+  activeprojectkey: handleRouter(db.activeprojectkey, getMockPathname),
+  deleteproject: handleRouter(db.deleteproject),
+  getinterface: handleRouter(db.getinterface),
+  deleteinterface: handleRouter(db.deleteinterface),
+  modifyinterface: handleRouter(db.modifyinterface),
+  createinterface: handleRouter(db.createinterface)
+}
+
+getMockPathname()
+
+function handleRouter (handleDB, callback = undefined) {
+  return (req, res) => {
+    let data = ''
+    let resdata = {
+      error: null,
+      msg: '',
+      data: {}
+    }
+    req.on('data', chunk => {
+      data+=chunk
+    })
+    req.on('end', () => {
+      let dbres = handleDB(data)
+      resdata.data = dbres
+      res.writeHead(200, { "Content-Type": "text/plain", "Access-Control-Allow-Origin": "*" })
+      res.end(JSON.stringify(resdata))
+      if (callback) callback()
+    })
+  }
+}
+
+function getMockPathname() {
+  activeProject = db.getactiveproject() || {}
+  mockPathname = Object.keys(activeProject).length > 0 ? activeProject.mock.map(item => item.url) : []
+}
+
+function mockFilter (activeProject, mockPathname, pathname, req, res) {
+  let index = mockPathname.indexOf(pathname)
+  res.writeHead(200, { "Content-Type": "text/plain" })
+  res.end(JSON.stringify(activeProject.mock[index].data))
 }
 
 function router(req, res, params) {
@@ -24,15 +66,17 @@ function router(req, res, params) {
   const query = parseurl(req.url, true).query
   const referer = req.headers.referer
   const { devPort, vorlonPort, ip } = params
-  console.log(referer)
-  if (pathname in routes) {
+
+  if (pathname in routes && (req.headers.origin == 'http://localhost:3000' || req.headers.origin == 'http://localhost:1337')) {
     routes[pathname](req, res)
+  } else if (mockPathname.includes(pathname)) {
+    mockFilter(activeProject, mockPathname, pathname, req, res)
   } else if (pathname == 'favicon.ico') {
     return null
   } else {
     proxyForward({req, res, devPort, vorlonPort, ip})
   }
-
 }
 
 exports.router = router
+exports.getMockPathname = getMockPathname

@@ -1,11 +1,13 @@
 const http = require('http')
+const fs = require("fs");
+const mime = require("mime");
 const path = require('path')
 const { exec } = require('child_process')
 const opn = require('opn')
 const zlib = require('zlib')
 const gzip = zlib.createGzip()
 const parseurl = require('url').parse
-const { moleProxyUrl, vorlonUrl, vorlonPort, remoteServer, remoteServerPort } = require('../config')
+const { moleProxyUrl, vorlonUrl, serveUrl, vorlonPort, remoteServer, remoteServerPort } = require('../config')
 const { router } = require('./router')
 
 function vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip) {
@@ -44,10 +46,25 @@ function vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonP
   })
 }
 
+function staticPageHandler(path, res) {
+  fs.readFile(path == '/' ? `./src/client/build/index.html` : `./src/client/build${path}`, function (err, data) {
+    if (err) {
+      return console.error(err);
+    }
+    res.writeHead(200, {'Content-type': mime.lookup(path), "Access-Control-Allow-Origin": "*"})
+    res.end(data,"utf-8");
+  })
+}
+
 module.exports = function(devPort, zokorPort, vorlonPort, ip) {
   http.createServer((req, res) => {
     router(req, res, {devPort, vorlonPort, ip})
   }).listen(zokorPort)
+
+  http.createServer((req, res) => {
+    const pathname = parseurl(req.url).pathname
+    staticPageHandler(pathname, res)
+  }).listen(3000)
 
   vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip)
 }
