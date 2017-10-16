@@ -1,6 +1,6 @@
 {
   "name": "zokor",
-  "version": "2.0.0",
+  "version": "2.0.7",
   "description": "A tool for remotely debugging and testing your WebAPP",
   "main": "index.js",
   "scripts": {
@@ -30,14 +30,14 @@
     "opn": "^5.1.0",
     "qrcode": "^0.9.0",
     "serve": "^6.2.0",
-    "vorlon": "^0.5.5"
+    "vorlon": "^0.5.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.26.0"
   },
   "bin": {
     "zokor": "bin/index"
   },
   "devDependencies": {
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-latest": "^6.24.1",
-    "babel-register": "^6.26.0"
   }
 }
