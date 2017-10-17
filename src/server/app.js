@@ -46,12 +46,12 @@ function vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonP
   })
 }
 
-function staticPageHandler(path, res) {
-  fs.readFile(path == '/' ? `./src/client/build/index.html` : `./src/client/build${path}`, function (err, data) {
+function staticPageHandler(pathname, res) {
+  fs.readFile(pathname == '/' ? path.resolve(__dirname, `../client/build/index.html`) : path.resolve(__dirname, `../client/build${pathname}`), function (err, data) {
     if (err) {
       return console.error(err);
     }
-    res.writeHead(200, {'Content-type': mime.lookup(path), "Access-Control-Allow-Origin": "*"})
+    res.writeHead(200, {'Content-type': mime.lookup(pathname), "Access-Control-Allow-Origin": "*"})
     res.end(data,"utf-8");
   })
 }

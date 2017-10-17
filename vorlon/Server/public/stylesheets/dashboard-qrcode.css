@@ -1,0 +1,22 @@
+.sidebar .logo {
+  color: white;
+  background: none;
+  font-weight: bold;
+  text-indent: 0;
+  text-align: center;
+  line-height: 40px;
+}
+
+.dashboard-plugins-overlay .message {
+  margin-top: 10%;
+}
+
+.dashboard-box {
+  width: 400px;
+  padding: 20px 10px;
+  float: left;
+}
+
+#dashboard-qrcode-origin, #dashboard-qrcode-na {
+  margin-top: 20px; 
+}
