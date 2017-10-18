@@ -14,9 +14,11 @@ function start (app, utils) {
   }
 }
 
-async function run (arg) {
-  let localIP = await getReliableIP()
-  require('./server/app')(arg, zokorPort, vorlonPort, localIP)
+function run (arg) {
+  getReliableIP()
+    .then(localIP => {
+      require('./server/app')(arg, zokorPort, vorlonPort, localIP)
+    })
 }
 
 function help () {
