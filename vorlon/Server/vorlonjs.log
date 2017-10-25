@@ -2464,3 +2464,6 @@
 {"level":"info","message":"   Vorlon.js PROXY listening at 0.0.0.0:5050","timestamp":"2017-10-17T06:15:54.173Z"}
 {"level":"info","message":"   Vorlon.js SERVER listening at 0.0.0.0:1337","timestamp":"2017-10-17T06:15:54.176Z"}
 {"type":"API","session":"default","level":"warn","message":"   API : No client in session default","timestamp":"2017-10-17T06:15:55.973Z"}
+{"level":"info","message":"   Vorlon.js PROXY listening at 0.0.0.0:5050","timestamp":"2017-10-25T12:45:09.666Z"}
+{"level":"info","message":"   Vorlon.js SERVER listening at 0.0.0.0:1337","timestamp":"2017-10-25T12:45:09.669Z"}
+{"type":"API","session":"default","level":"warn","message":"   API : No client in session default","timestamp":"2017-10-25T12:45:12.335Z"}

@@ -11,38 +11,41 @@ const { moleProxyUrl, vorlonUrl, serveUrl, vorlonPort, remoteServer, remoteServe
 const { router } = require('./router')
 
 function vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip) {
-  let moleProxy = exec(`node ${moleProxyUrl} ${remoteServer}:8008 ${zokorPort} ${remoteServerPort}`, (err, stdout) => {
-    if (err) {
-      console.error(err)
-    }
-    if (/Exiting/.test(stdout)) {
-      remoteServerPort++
-      vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip)
-      // 未杀死进程
-    } else {
-      console.log(stdout)
-      process.exit(1)
-    }
-  })
-
-  moleProxy.stdout.on('data', data => {
-    if (data.indexOf(remoteServer) >= 0) {
-      console.log(data)
-      console.log(`zokor serve start`)
-      console.log(`localhost:${devPort} <=> localhost:${zokorPort}`)
-
-      let vorlon = exec(`node ${vorlonUrl}`, (err, stdout) => {
-        if (err) {
-          console.log(err)
-          console.log('Error on opening vorlon')
-        }
-      })
-      vorlon.stdout.on('data', data => {
-        if (data.indexOf(vorlonPort) >= 0) {
-          opn(`http://localhost:${vorlonPort}`)
-        }
-      })
-    }
+  return new Promise((resolve, reject) => {
+    let moleProxy = exec(`node ${moleProxyUrl} ${remoteServer}:8008 ${zokorPort} ${remoteServerPort}`, (err, stdout) => {
+      if (err) {
+        console.error(err)
+      }
+      if (/Exiting/.test(stdout)) {
+        remoteServerPort++
+        vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip)
+        // 未杀死进程
+      } else {
+        console.log(stdout)
+        process.exit(1)
+      }
+    })
+  
+    moleProxy.stdout.on('data', data => {
+      if (data.indexOf(remoteServer) >= 0) {
+        console.log(data)
+        console.log(`zokor serve start`)
+        console.log(`localhost:${devPort} <=> localhost:${zokorPort}`)
+  
+        let vorlon = exec(`node ${vorlonUrl}`, (err, stdout) => {
+          if (err) {
+            console.log(err)
+            console.log('Error on opening vorlon')
+          }
+        })
+        vorlon.stdout.on('data', data => {
+          if (data.indexOf(vorlonPort) >= 0) {
+            opn(`http://localhost:${vorlonPort}`)
+            resolve(remoteServerPort)
+          }
+        })
+      }
+    })
   })
 }
 
@@ -57,14 +60,15 @@ function staticPageHandler(pathname, res) {
 }
 
 module.exports = function(devPort, zokorPort, vorlonPort, ip) {
-  http.createServer((req, res) => {
-    router(req, res, {devPort, vorlonPort, ip})
-  }).listen(zokorPort)
-
-  http.createServer((req, res) => {
-    const pathname = parseurl(req.url).pathname
-    staticPageHandler(pathname, res)
-  }).listen(3000)
-
   vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip)
+    .then(curRemoteServerPort => {
+      http.createServer((req, res) => {
+        router(req, res, {devPort, vorlonPort, curRemoteServerPort, ip})
+      }).listen(zokorPort)
+    
+      http.createServer((req, res) => {
+        const pathname = parseurl(req.url).pathname
+        staticPageHandler(pathname, res)
+      }).listen(3000)
+    })
 }

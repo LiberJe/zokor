@@ -43,20 +43,20 @@ var VORLON;
                     _this._txtUrlOrigin = devinfo.origin;
                     _this._txtUrlNa = devinfo.na;
                     _this._qrcodeUrlOrigin = "https://s.waimai.baidu.com/xin/open.html#" + _this._txtUrlOrigin;
-                    _this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + _this._txtUrlNa.replace(/^(bdwm:\/\/native\?pageName=webview&url)/, 'bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23');
+                    _this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + _this._txtUrlNa;
                     $('#txt-origin').val(_this._txtUrlOrigin);
                     $('#txt-na').val(_this._txtUrlNa);
                     $('#qrcode-origin').qrcode({ width: 200, height: 200, text: _this._qrcodeUrlOrigin });
                     $('#qrcode-na').qrcode({ width: 200, height: 200, text: _this._qrcodeUrlNa });
                     // Send message to client when user types and hits return
-                    $('#qrcode-origin').bind('input propertychange', function () {
+                    $('#txt-origin').bind('input propertychange', function () {
                         $('#qrcode-origin')[0].removeChild($('#qrcode-origin')[0].childNodes[0]);
                         _this._qrcodeUrlOrigin = 'https://s.waimai.baidu.com/xin/open.html#' + $("#txt-origin").val();
                         $('#qrcode-origin').qrcode({ width: 200, height: 200, text: _this._qrcodeUrlOrigin });
                     });
-                    $('#qrcode-na').bind('input propertychange', function () {
+                    $('#txt-na').bind('input propertychange', function () {
                         $('#qrcode-na')[0].removeChild($('#qrcode-na')[0].childNodes[0]);
-                        _this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + $("#txt-na").val().replace(/^(bdwm:\/\/native\?pageName=webview&url)/, 'bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23');
+                        _this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + $("#txt-na").val();
                         $('#qrcode-na').qrcode({ width: 200, height: 200, text: _this._qrcodeUrlNa });
                     });
                 });

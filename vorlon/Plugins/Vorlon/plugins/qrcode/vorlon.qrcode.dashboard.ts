@@ -45,7 +45,7 @@ module VORLON {
                     this._txtUrlOrigin = devinfo.origin
                     this._txtUrlNa = devinfo.na
                     this._qrcodeUrlOrigin = `https://s.waimai.baidu.com/xin/open.html#${this._txtUrlOrigin}`
-                    this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + this._txtUrlNa.replace(/^(bdwm:\/\/native\?pageName=webview&url)/, 'bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23')
+                    this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + this._txtUrlNa
     
                     $('#txt-origin').val(this._txtUrlOrigin)
                     $('#txt-na').val(this._txtUrlNa)
@@ -53,14 +53,14 @@ module VORLON {
                     $('#qrcode-na').qrcode({ width: 200, height: 200, text: this._qrcodeUrlNa })
     
                     // Send message to client when user types and hits return
-                    $('#qrcode-origin').bind('input propertychange', () => {
+                    $('#txt-origin').bind('input propertychange', () => {
                         $('#qrcode-origin')[0].removeChild($('#qrcode-origin')[0].childNodes[0])
                         this._qrcodeUrlOrigin = 'https://s.waimai.baidu.com/xin/open.html#' + $("#txt-origin").val()
                         $('#qrcode-origin').qrcode({ width: 200, height: 200, text: this._qrcodeUrlOrigin })
                     })
-                    $('#qrcode-na').bind('input propertychange', () => {
+                    $('#txt-na').bind('input propertychange', () => {
                         $('#qrcode-na')[0].removeChild($('#qrcode-na')[0].childNodes[0])
-                        this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + $("#txt-na").val().replace(/^(bdwm:\/\/native\?pageName=webview&url)/, 'bdwm://native?pageName=webview&url=https%3A%2F%2Fs.waimai.baidu.com%2Fxin%2Fopen.html%23')
+                        this._qrcodeUrlNa = 'https://s.waimai.baidu.com/xin/open.html#' + $("#txt-na").val()
                         $('#qrcode-na').qrcode({ width: 200, height: 200, text: this._qrcodeUrlNa })
                     })
                 })

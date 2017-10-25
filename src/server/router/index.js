@@ -6,27 +6,6 @@ const db = require('../db')
 let activeProject = {}
 let mockPathname = []
 
-const routes = {
-  qrcode: (req, res) => {
-    const data = {
-      origin: `http://${remoteServer}:${remoteServerPort}`,
-      na: `bdwm://native?pageName=webview&url=http%3A%2F%2F${remoteServer}%3A${remoteServerPort}&header=2`
-    }
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.writeHead(200, { "Content-Type": "text/plain" })
-    res.end(JSON.stringify(data))
-  },
-  addproject: handleRouter(db.addproject),
-  getprojectlist: handleRouter(db.getprojectlist),
-  getactiveprojectkey: handleRouter(db.getactiveprojectkey),
-  activeprojectkey: handleRouter(db.activeprojectkey, getMockPathname),
-  deleteproject: handleRouter(db.deleteproject),
-  getinterface: handleRouter(db.getinterface),
-  deleteinterface: handleRouter(db.deleteinterface),
-  modifyinterface: handleRouter(db.modifyinterface),
-  createinterface: handleRouter(db.createinterface)
-}
-
 getMockPathname()
 
 function handleRouter (handleDB, callback = undefined) {
@@ -65,7 +44,28 @@ function router(req, res, params) {
   const pathname = parseurl(req.url).pathname.substring(1)
   const query = parseurl(req.url, true).query
   const referer = req.headers.referer
-  const { devPort, vorlonPort, ip } = params
+  const { devPort, vorlonPort, curRemoteServerPort, ip } = params
+
+  const routes = {
+    qrcode: (req, res) => {
+      const data = {
+        origin: `http://${remoteServer}:${curRemoteServerPort}`,
+        na: `bdwm://native?pageName=webview&url=http%3A%2F%2F${remoteServer}%3A${curRemoteServerPort}&header=2`
+      }
+      res.setHeader("Access-Control-Allow-Origin", "*")
+      res.writeHead(200, { "Content-Type": "text/plain" })
+      res.end(JSON.stringify(data))
+    },
+    addproject: handleRouter(db.addproject),
+    getprojectlist: handleRouter(db.getprojectlist),
+    getactiveprojectkey: handleRouter(db.getactiveprojectkey),
+    activeprojectkey: handleRouter(db.activeprojectkey, getMockPathname),
+    deleteproject: handleRouter(db.deleteproject),
+    getinterface: handleRouter(db.getinterface),
+    deleteinterface: handleRouter(db.deleteinterface),
+    modifyinterface: handleRouter(db.modifyinterface),
+    createinterface: handleRouter(db.createinterface)
+  }
 
   if (pathname in routes && (req.headers.origin == 'http://localhost:3000' || req.headers.origin == 'http://localhost:1337')) {
     routes[pathname](req, res)
