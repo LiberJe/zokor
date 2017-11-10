@@ -1,6 +1,7 @@
 const parseurl = require('url').parse
 const { proxyForward } = require('../interceptor/injector')
 const { remoteServer, remoteServerPort, vorlonPort } = require('../../config')
+const { transformProtocol } = require('../../utils')
 const db = require('../db') 
 
 let activeProject = {}
@@ -44,14 +45,19 @@ function router(req, res, params) {
   const pathname = parseurl(req.url).pathname.substring(1)
   const query = parseurl(req.url, true).query
   const referer = req.headers.referer
-  const { devPort, vorlonPort, curRemoteServerPort, ip } = params
+  const { devServer, devPort, vorlonPort, curRemoteServerPort, ip, userConfig } = params
 
   const routes = {
     qrcode: (req, res) => {
-      const data = {
-        origin: `http://${remoteServer}:${curRemoteServerPort}`,
-        na: `bdwm://native?pageName=webview&url=http%3A%2F%2F${remoteServer}%3A${curRemoteServerPort}&header=2`
-      }
+      const data = userConfig.mole
+        ? {
+            origin: `http://${remoteServer}:${curRemoteServerPort}`,
+            na: transformProtocol[`${userConfig.env}`](remoteServer, curRemoteServerPort)
+          }
+        : {
+          origin: `http://${ip}:${curRemoteServerPort}`,
+          na: transformProtocol[`${userConfig.env}`](remoteServer, remoteServerPort)
+          }
       res.setHeader("Access-Control-Allow-Origin", "*")
       res.writeHead(200, { "Content-Type": "text/plain" })
       res.end(JSON.stringify(data))
@@ -74,7 +80,7 @@ function router(req, res, params) {
   } else if (pathname == 'favicon.ico') {
     return null
   } else {
-    proxyForward({req, res, devPort, vorlonPort, ip})
+    proxyForward({req, res, devServer, devPort, vorlonPort, ip})
   }
 }
 

@@ -10,16 +10,36 @@ const parseurl = require('url').parse
 const { moleProxyUrl, vorlonUrl, serveUrl, vorlonPort, remoteServer, remoteServerPort } = require('../config')
 const { router } = require('./router')
 
-function vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip) {
+function vorlonStart(devServer, devPort, zokorPort, remoteServer, remoteServerPort, vorlonPort, vorlonUrl, ip, userConfig) {
   return new Promise((resolve, reject) => {
-    let moleProxyFunc = (moleProxyUrl, remoteServer, zokorPort, remoteServerPort, resolve) => {
+    let vorlonFunc = (devServer, devPort, remoteServerPort, zokorPort, vorlonPort, vorlonUrl, userConfig, resolve) => {
+      console.log(`zokor serve start`)
+      console.log(`${devServer}:${devPort} <=> localhost:${zokorPort}`)
+
+      let vorlon = exec(`node ${vorlonUrl}`, (err, stdout) => {
+        if (err) {
+          console.log(err)
+          console.log('Error on opening vorlon')
+        }
+      })
+      vorlon.stdout.on('data', data => {
+        if (data.indexOf(vorlonPort) >= 0) {
+          opn(`http://localhost:${vorlonPort}`)
+          userConfig.mole
+            ? resolve(remoteServerPort)
+            : resolve(zokorPort)
+        }
+      })
+    }
+    
+    let moleProxyFunc = (devServer, devPort, moleProxyUrl, remoteServer, zokorPort, remoteServerPort, resolve) => {
       let moleProxy = exec(`node ${moleProxyUrl} ${remoteServer}:8008 ${zokorPort} ${remoteServerPort}`, (err, stdout) => {
         if (err) {
           console.error(err)
         }
         if (/Exiting/.test(stdout)) {
           remoteServerPort++
-          moleProxyFunc(moleProxyUrl, remoteServer, zokorPort, remoteServerPort, resolve)
+          moleProxyFunc(devServer, devPort, moleProxyUrl, remoteServer, zokorPort, remoteServerPort, resolve)
         } else {
           console.log(stdout)
           process.exit(1)
@@ -29,26 +49,14 @@ function vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonP
       moleProxy.stdout.on('data', data => {
         if (data.indexOf(remoteServer) >= 0) {
           console.log(data)
-          console.log(`zokor serve start`)
-          console.log(`localhost:${devPort} <=> localhost:${zokorPort}`)
-    
-          let vorlon = exec(`node ${vorlonUrl}`, (err, stdout) => {
-            if (err) {
-              console.log(err)
-              console.log('Error on opening vorlon')
-            }
-          })
-          vorlon.stdout.on('data', data => {
-            if (data.indexOf(vorlonPort) >= 0) {
-              opn(`http://localhost:${vorlonPort}`)
-              resolve(remoteServerPort)
-            }
-          })
+          vorlonFunc(devServer, devPort, remoteServerPort, zokorPort, vorlonPort, vorlonUrl, userConfig, resolve)
         }
       })
     }
 
-    moleProxyFunc(moleProxyUrl, remoteServer, zokorPort, remoteServerPort, resolve)
+    userConfig.mole
+      ? moleProxyFunc(devServer, devPort, moleProxyUrl, remoteServer, zokorPort, remoteServerPort, resolve)
+      : vorlonFunc(devServer, devPort, remoteServerPort, zokorPort, vorlonPort, vorlonUrl, userConfig, resolve)
   })
 }
 
@@ -62,11 +70,11 @@ function staticPageHandler(pathname, res) {
   })
 }
 
-module.exports = function(devPort, zokorPort, vorlonPort, ip) {
-  vorlonStart(remoteServer, devPort, zokorPort, remoteServerPort, vorlonPort, ip)
+module.exports = function(devServer, devPort, zokorPort, vorlonPort, ip, userConfig) {
+  vorlonStart(devServer, devPort, zokorPort, remoteServer, remoteServerPort, vorlonPort, vorlonUrl, ip, userConfig)
     .then(curRemoteServerPort => {
       http.createServer((req, res) => {
-        router(req, res, {devPort, vorlonPort, curRemoteServerPort, ip})
+        router(req, res, {devServer, devPort, vorlonPort, curRemoteServerPort, ip, userConfig})
       }).listen(zokorPort)
     
       http.createServer((req, res) => {

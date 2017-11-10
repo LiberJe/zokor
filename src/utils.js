@@ -59,7 +59,14 @@ function replaceTpl (str, {name, variable}) {
   return res
 }
 
+const transformProtocol = {
+  bdwm: (server, port) => `bdwm://native?pageName=webview&url=http%3A%2F%2F${server}%3A${port}&header=2`,
+  ele: (server, port) => ``
+}
+
+
 exports.getIP = getIP
 exports.getReliableIP = getReliableIP
 exports.getPort = getPort
 exports.replaceTpl = replaceTpl
+exports.transformProtocol = transformProtocol

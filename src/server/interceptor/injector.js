@@ -17,8 +17,8 @@ function injector(target, injection, pos) {
   }
 }
 
-function proxyForward({ req, res, ip, devPort, vorlonPort }) {
-  const opt = parseurl(`http://${ip}:${devPort}${req.url}`)
+function proxyForward({ req, res, ip, devServer, devPort, vorlonPort }) {
+  const opt = parseurl(`http://${devServer}:${devPort}${req.url}`)
   opt.headers = req.headers
   opt.method = req.method
 
